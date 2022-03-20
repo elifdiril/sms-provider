@@ -1,19 +1,21 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import queryString from "query-string";
 
 const SmsContext = createContext();
 
 export const SmsProvider = ({ children }) => {
-  const [sms, setSms] = useState([]);
-  const [idCount, setIdCount] = useState(0);
-  const [token, setToken] = useState(sessionStorage.getItem("token"));
+  const [smsProvider, setSmsProvider] = useState([]);
+  const [token, setToken] = useState(
+    JSON.parse(sessionStorage.getItem("token"))
+  );
+  const [selectedSmsProviderId, setSelectedSmsProviderId] = useState();
+  const [selectedSmsProvider, setSelectedSmsProvider] = useState({});
 
   useEffect(() => {
     const tokenRequestOptions = {
       method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: queryString.stringify({
         grant_type: "password",
         client_id: "ClientIdWithFullAccess",
         client_secret: "fullAccessSecret",
@@ -30,30 +32,39 @@ export const SmsProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const getSmsRequestOptions = {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    };
-
     if (token) {
+      const getSmsRequestOptions = {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token.access_token}` },
+      };
+
       fetch(
         "http://c4f2.acsight.com:7770/api/system/sms-provider-list",
         getSmsRequestOptions
       )
         .then((response) => response.json())
-        .then((data) => {
-          setSms(data);
+        .then((res) => {
+          setSmsProvider(res.data.partnerProviders);
         })
         .catch(console.error);
     }
   }, []);
 
+  useEffect(() => {
+    setSelectedSmsProvider(
+      smsProvider.find((item) => item.id == selectedSmsProviderId)
+    );
+  }, [selectedSmsProviderId]);
+
   const addSms = (smsObj) => {
-    const newItemId = idCount + 1;
     const addSmsRequestOptions = {
       method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ id: newItemId, ...smsObj }),
+      headers: { Authorization: `Bearer ${token.access_token}` },
+      body: JSON.stringify({
+        id: 0,
+        PartnerID: process.env.REACT_APP_PARTNER_ID,
+        ...smsObj,
+      }),
     };
 
     fetch(
@@ -70,7 +81,7 @@ export const SmsProvider = ({ children }) => {
   const updateSms = (smsObj) => {
     const updateSmsRequestOptions = {
       method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token.access_token}` },
       body: JSON.stringify({ ...smsObj }),
     };
 
@@ -86,7 +97,10 @@ export const SmsProvider = ({ children }) => {
   };
 
   const values = {
-    sms,
+    smsProvider,
+    selectedSmsProviderId,
+    selectedSmsProvider,
+    setSelectedSmsProviderId,
     addSms,
     updateSms,
   };

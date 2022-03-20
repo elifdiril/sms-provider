@@ -1,9 +1,9 @@
 export const ProviderEnum = Object.freeze({
-  PostaGuvercini: 1,
-  MobilDev: 2,
-  JetSMS: 3,
-  MailJet: 4,
-  Twilio: 5,
-  InfoBip: 6,
-  Vonage: 7,
-});
+    1: "PostaGuvercini",
+    2: "MobilDev",
+    3: "JetSMS",
+    4: "MailJet",
+    5: "Twilio",
+    6: "InfoBip",
+    7: "Vonage",
+  });
