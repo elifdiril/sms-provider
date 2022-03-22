@@ -3,9 +3,9 @@ import validationSchema from "./validations";
 import Error from "./Error";
 import { useSms } from "../context/SmsContext";
 
-function Form() {
-  const { selectedSmsProvider } = useSms();
-  
+function Form({ selectedSmsProvider }) {
+  const { addSms, updateSms } = useSms();
+
   const {
     values,
     handleSubmit,
@@ -16,24 +16,26 @@ function Form() {
     touched,
   } = useFormik({
     initialValues: {
-      providerID: null,
-      baseURL: "",
-      fromName: "",
-      username: "",
-      password: "",
-      vendorCode: "",
-      apiKey: "",
-      secretKey: "",
-      accountSID: "",
-      authToken: "",
-      status: "true",
+      providerID: selectedSmsProvider?.providerID || null,
+      baseURL: selectedSmsProvider?.baseURL || "",
+      fromName: selectedSmsProvider?.fromName || "",
+      username: selectedSmsProvider?.username || "",
+      password: selectedSmsProvider?.password || "",
+      vendorCode: selectedSmsProvider?.vendorCode || "",
+      apiKey: selectedSmsProvider?.apiKey || "",
+      secretKey: selectedSmsProvider?.secretKey || "",
+      accountSID: selectedSmsProvider?.accountSID || "",
+      authToken: selectedSmsProvider?.authToken || "",
+      status: selectedSmsProvider?.status || 1,
     },
     onSubmit: (values) => {
-      console.log(values);
-      console.log(selectedSmsProvider);
+      if (!!selectedSmsProvider) {
+        updateSms(values);
+      } else {
+        addSms(values);
+      }
     },
     validationSchema,
-    // validateOnMount: true,
   });
 
   return (
@@ -41,14 +43,19 @@ function Form() {
       <form className="form" onSubmit={handleSubmit} autoComplete="off">
         <div>
           <div className="inputs">
-            <select name="providerID" onChange={handleChange}>
-              <option value="1">PostaGuvercini</option>
-              <option value="2">MobilDev</option>
-              <option value="3">JetSMS</option>
-              <option value="4">MailJet</option>
-              <option value="5">Twilio</option>
-              <option value="6">InfoBip</option>
-              <option value="7">Vonage</option>
+            <select
+              name="providerID"
+              onChange={handleChange}
+              value={values.providerID}
+            >
+              <option defaultValue>Select Provider</option>
+              <option value={1}>PostaGuvercini</option>
+              <option value={2}>MobilDev</option>
+              <option value={3}>JetSMS</option>
+              <option value={4}>MailJet</option>
+              <option value={5}>Twilio</option>
+              <option value={6}>InfoBip</option>
+              <option value={7}>Vonage</option>
             </select>
             {errors.providerID && touched.providerID && (
               <Error message={errors.providerID} />
@@ -154,20 +161,14 @@ function Form() {
             )}
 
             <select name="status" onChange={handleChange}>
-              <option value="true">Active</option>
-              <option value="false">Passive</option>
+              <option value={1}>Active</option>
+              <option value={0}>Passive</option>
             </select>
             {errors.status && touched.status && (
               <Error message={errors.status} />
             )}
           </div>
           <button type="submit">Submit</button>
-
-          <h2>Errors</h2>
-          <pre>{JSON.stringify(errors, null, 2)}</pre>
-
-          <h2>Touched</h2>
-          <pre>{JSON.stringify(touched, null, 2)}</pre>
         </div>
       </form>
     </div>

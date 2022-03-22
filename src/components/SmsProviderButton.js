@@ -1,6 +1,7 @@
 import React from "react";
 import { useSms } from "../context/SmsContext";
 import { useNavigate } from "react-router-dom";
+import "../App.css";
 
 function SmsProviderButton({ isUpdate = false }) {
   const { selectedSmsProviderId } = useSms();
@@ -18,6 +19,7 @@ function SmsProviderButton({ isUpdate = false }) {
 
   return (
     <button
+      className="smsProviderButton"
       onClick={onClickHandle}
       disabled={isUpdate && !selectedSmsProviderId ? true : false}
     >

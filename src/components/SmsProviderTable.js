@@ -89,16 +89,19 @@ function SmsProviderTable() {
     },
   ];
 
-  const rowEvents = {
-    onClick: (_, row) => {
-      const { id } = row;
-      setSelectedSmsProviderId(id);
-    },
-  };
-
   //overflow contents fixed
   const rowStyle = {
     overflowWrap: "break-word",
+  };
+
+  const selectRow = {
+    mode: "radio",
+    bgColor: "#D885A3",
+    onSelect: (row, isSelect, rowIndex, e) => {
+      const { id } = row;
+      setSelectedSmsProviderId(isSelect ? id : null);
+      // ...
+    },
   };
 
   return (
@@ -111,7 +114,7 @@ function SmsProviderTable() {
           data={smsProvider}
           columns={columns}
           pagination={paginationFactory()}
-          rowEvents={rowEvents}
+          selectRow={selectRow}
         />
       )}
     </div>

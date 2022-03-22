@@ -1,3 +1,17 @@
+.App{
+  background-color: #FDEFF4;
+  height: 100vh;
+}
+.smsProviderButton{
+  background-color: #007bff;
+  color: white;
+}
+
+.smsProviderButton:disabled{
+  background-color: darkgray;
+  color: white;
+}
+
 .smsButton {
   display: flex;
   justify-content: flex-end;

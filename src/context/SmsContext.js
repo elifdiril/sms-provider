@@ -59,7 +59,7 @@ export const SmsProvider = ({ children }) => {
   const addSms = (smsObj) => {
     const addSmsRequestOptions = {
       method: "POST",
-      headers: { Authorization: `Bearer ${token.access_token}` },
+      headers: { Authorization: `Bearer ${token.access_token}`},
       body: JSON.stringify({
         id: 0,
         PartnerID: process.env.REACT_APP_PARTNER_ID,
@@ -81,8 +81,12 @@ export const SmsProvider = ({ children }) => {
   const updateSms = (smsObj) => {
     const updateSmsRequestOptions = {
       method: "POST",
-      headers: { Authorization: `Bearer ${token.access_token}` },
-      body: JSON.stringify({ ...smsObj }),
+      headers: { Authorization: `Bearer ${token.access_token}` ,"Content-Type": "application/x-www-form-urlencoded"},
+      body: queryString.stringify({
+        id: selectedSmsProviderId,
+        PartnerID: process.env.REACT_APP_PARTNER_ID,
+        ...smsObj,
+      }),
     };
 
     fetch(
@@ -91,7 +95,7 @@ export const SmsProvider = ({ children }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        alert(JSON.stringify(data) + "guncellendi");
+        console.log(data + "guncellendi");
       })
       .catch(console.error);
   };
