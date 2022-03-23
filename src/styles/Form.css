@@ -1,0 +1,51 @@
+.form {
+  margin: 3% 35%;
+}
+
+.form input {
+  padding: 5px;
+  font-size: 18px;
+}
+
+.form select {
+  padding: 5px;
+  font-size: 18px;
+  width: 245px;
+}
+
+.form div > * {
+  margin: 5px 0;
+}
+
+.form button {
+  display: block;
+}
+
+.inputs > input {
+  display: block;
+}
+
+.error {
+  color: red;
+  font-size: 11px;
+}
+
+.formButtons {
+  display: flex;
+}
+
+.formButtons button {
+  margin-right: 5px;
+  height: 28px;
+  width: 68px;
+  border-color:rgb(139, 186, 224) ;
+}
+
+.formButtons :nth-child(1){
+  background-color: rgb(255, 196, 0);
+}
+
+.formButtons :nth-child(2){
+  background-color: #007bff;
+  color: aliceblue;
+}

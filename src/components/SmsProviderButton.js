@@ -1,7 +1,7 @@
 import React from "react";
 import { useSms } from "../context/SmsContext";
 import { useNavigate } from "react-router-dom";
-import "../App.css";
+import "../styles/SmsProviderButton.css";
 
 function SmsProviderButton({ isUpdate = false }) {
   const { selectedSmsProviderId } = useSms();

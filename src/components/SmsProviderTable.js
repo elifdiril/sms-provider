@@ -92,15 +92,15 @@ function SmsProviderTable() {
   //overflow contents fixed
   const rowStyle = {
     overflowWrap: "break-word",
+    verticalAlign: "baseline"
   };
 
   const selectRow = {
     mode: "radio",
     bgColor: "#D885A3",
-    onSelect: (row, isSelect, rowIndex, e) => {
+    onSelect: (row, isSelect) => {
       const { id } = row;
       setSelectedSmsProviderId(isSelect ? id : null);
-      // ...
     },
   };
 

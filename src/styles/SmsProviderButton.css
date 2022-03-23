@@ -1,0 +1,9 @@
+.smsProviderButton {
+    background-color: #007bff;
+    color: white;
+}
+
+.smsProviderButton:disabled {
+    background-color: darkgray;
+    color: white;
+}

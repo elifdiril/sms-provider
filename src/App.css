@@ -1,15 +1,5 @@
-.App{
-  background-color: #FDEFF4;
-  height: 100vh;
-}
-.smsProviderButton{
-  background-color: #007bff;
-  color: white;
-}
-
-.smsProviderButton:disabled{
-  background-color: darkgray;
-  color: white;
+.App {
+  font-size: x-small;
 }
 
 .smsButton {
@@ -18,38 +8,6 @@
   padding: 1%;
 }
 
-.form {
-  margin: 5px;
-}
-
-.form input {
-  padding: 5px;
-  font-size: 18px;
-}
-
-.form select {
-  padding: 5px;
-  font-size: 18px;
-  width: 245px;
-}
-
-.form div > * {
-  margin: 5px 0;
-}
-
-.form button {
-  display: block;
-}
-
-.theme button {
-  display: inline-block;
-}
-
-.inputs > input {
-  display: block;
-}
-
-.error {
-  color: red;
-  font-size: 11px;
+.list {
+  padding: 2% 7%;
 }
