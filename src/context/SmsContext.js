@@ -34,7 +34,10 @@ export const SmsProvider = ({ children }) => {
 
   useEffect(() => {
     if (token || sessionStorage.getItem("token")) {
-      const _token = token || JSON.parse(sessionStorage.getItem("token"));
+      let _token = token || JSON.parse(sessionStorage.getItem("token"));
+      if(typeof _token === 'string'){
+        _token = JSON.parse(_token);
+      }
       const getSmsRequestOptions = {
         method: "GET",
         headers: { Authorization: `Bearer ${_token.access_token}` },
@@ -50,7 +53,7 @@ export const SmsProvider = ({ children }) => {
         })
         .catch(console.error);
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     setSelectedSmsProvider(
