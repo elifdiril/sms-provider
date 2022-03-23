@@ -16,7 +16,7 @@ function Form({ selectedSmsProvider }) {
     touched,
   } = useFormik({
     initialValues: {
-      providerID: selectedSmsProvider?.providerID || null,
+      providerID: selectedSmsProvider?.providerID || undefined,
       baseURL: selectedSmsProvider?.baseURL || "",
       fromName: selectedSmsProvider?.fromName || "",
       username: selectedSmsProvider?.username || "",
@@ -26,7 +26,6 @@ function Form({ selectedSmsProvider }) {
       secretKey: selectedSmsProvider?.secretKey || "",
       accountSID: selectedSmsProvider?.accountSID || "",
       authToken: selectedSmsProvider?.authToken || "",
-      status: selectedSmsProvider?.status || 1,
     },
     onSubmit: (values) => {
       if (!!selectedSmsProvider) {
@@ -158,14 +157,6 @@ function Form({ selectedSmsProvider }) {
             />
             {errors.authToken && touched.authToken && (
               <Error message={errors.authToken} />
-            )}
-
-            <select name="status" onChange={handleChange}>
-              <option value={1}>Active</option>
-              <option value={0}>Passive</option>
-            </select>
-            {errors.status && touched.status && (
-              <Error message={errors.status} />
             )}
           </div>
           <button type="submit">Submit</button>

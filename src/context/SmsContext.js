@@ -27,15 +27,17 @@ export const SmsProvider = ({ children }) => {
       .then((response) => response.json())
       .then((data) => {
         sessionStorage.setItem("token", JSON.stringify(data));
+        setToken(JSON.stringify(data));
       })
       .catch(console.error);
   }, []);
 
   useEffect(() => {
-    if (token) {
+    if (token || sessionStorage.getItem("token")) {
+      const _token = token || JSON.parse(sessionStorage.getItem("token"));
       const getSmsRequestOptions = {
         method: "GET",
-        headers: { Authorization: `Bearer ${token.access_token}` },
+        headers: { Authorization: `Bearer ${_token.access_token}` },
       };
 
       fetch(
@@ -59,10 +61,12 @@ export const SmsProvider = ({ children }) => {
   const addSms = (smsObj) => {
     const addSmsRequestOptions = {
       method: "POST",
-      headers: { Authorization: `Bearer ${token.access_token}`},
+      headers: {
+        Authorization: `Bearer ${JSON.parse(token).access_token}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
-        id: 0,
-        PartnerID: process.env.REACT_APP_PARTNER_ID,
+        partnerID: process.env.REACT_APP_PARTNER_ID,
         ...smsObj,
       }),
     };
@@ -81,10 +85,14 @@ export const SmsProvider = ({ children }) => {
   const updateSms = (smsObj) => {
     const updateSmsRequestOptions = {
       method: "POST",
-      headers: { Authorization: `Bearer ${token.access_token}` ,"Content-Type": "application/x-www-form-urlencoded"},
-      body: queryString.stringify({
+      headers: {
+        Authorization: `Bearer ${JSON.parse(token).access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         id: selectedSmsProviderId,
-        PartnerID: process.env.REACT_APP_PARTNER_ID,
+        partnerID: process.env.REACT_APP_PARTNER_ID,
+        status: true,
         ...smsObj,
       }),
     };
