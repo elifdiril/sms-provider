@@ -1,4 +1,3 @@
-import React from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import { useSms } from "../context/SmsContext";
@@ -7,8 +6,8 @@ import getProviderName from "../helper/getProviderName";
 import getStatusName from "../helper/getStatusName";
 
 function SmsProviderTable() {
-  const { setSelectedSmsProviderId, smsProvider } = useSms();
-
+  const { setSelectedSmsProviderId, smsProvider, currentPage, setCurrentPage } =
+    useSms();
   const columns = [
     {
       dataField: "id",
@@ -92,7 +91,7 @@ function SmsProviderTable() {
   //overflow contents fixed
   const rowStyle = {
     overflowWrap: "break-word",
-    verticalAlign: "baseline"
+    verticalAlign: "baseline",
   };
 
   const selectRow = {
@@ -101,6 +100,13 @@ function SmsProviderTable() {
     onSelect: (row, isSelect) => {
       const { id } = row;
       setSelectedSmsProviderId(isSelect ? id : null);
+    },
+  };
+
+  const options = {
+    page: currentPage,
+    onPageChange: (page) => {
+      setCurrentPage(page);
     },
   };
 
@@ -113,7 +119,7 @@ function SmsProviderTable() {
           rowStyle={rowStyle}
           data={smsProvider}
           columns={columns}
-          pagination={paginationFactory()}
+          pagination={paginationFactory(options)}
           selectRow={selectRow}
         />
       )}

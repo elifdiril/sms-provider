@@ -13,7 +13,6 @@ function Form({ selectedSmsProvider }) {
     values,
     handleSubmit,
     handleChange,
-    setFieldValue,
     handleBlur,
     errors,
     touched,
@@ -36,7 +35,7 @@ function Form({ selectedSmsProvider }) {
       } else {
         addSms(values);
       }
-      navigate("/");
+      setTimeout(() => navigate("/"), 600);
     },
     validationSchema,
   });

@@ -11,6 +11,8 @@ export const SmsProvider = ({ children }) => {
   );
   const [selectedSmsProviderId, setSelectedSmsProviderId] = useState();
   const [selectedSmsProvider, setSelectedSmsProvider] = useState({});
+  const [maxId, setMaxId] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     //content type has to be application/x-www-form-urlencoded, otherwise it does not work
@@ -58,6 +60,16 @@ export const SmsProvider = ({ children }) => {
   }, [token]);
 
   useEffect(() => {
+    let max = 0;
+    smsProvider.forEach((item) => {
+      if (item.id > max) {
+        max = item.id;
+      }
+    });
+    setMaxId(max);
+  }, []);
+
+  useEffect(() => {
     setSelectedSmsProvider(
       smsProvider.find((item) => item.id == selectedSmsProviderId)
     );
@@ -72,6 +84,7 @@ export const SmsProvider = ({ children }) => {
       },
       body: JSON.stringify({
         partnerID: process.env.REACT_APP_PARTNER_ID,
+        status: true,
         ...smsObj,
       }),
     };
@@ -86,6 +99,8 @@ export const SmsProvider = ({ children }) => {
           toast.error(res.message);
           return;
         }
+        setSmsProvider((prev) => prev, { ...smsObj, id: maxId + 1 });
+        setSelectedSmsProviderId(null);
         toast.success("Added successfully");
       })
       .catch((err) => toast.error("Error: " + err));
@@ -101,7 +116,7 @@ export const SmsProvider = ({ children }) => {
       body: JSON.stringify({
         id: selectedSmsProviderId,
         partnerID: process.env.REACT_APP_PARTNER_ID,
-        status: true,
+        status: selectedSmsProvider.status,
         ...smsObj,
       }),
     };
@@ -118,7 +133,7 @@ export const SmsProvider = ({ children }) => {
         }
 
         const index = smsProvider.findIndex(
-          (item) => item.id == selectedSmsProvider.id
+          (item) => item.id == selectedSmsProviderId
         );
         smsProvider[index] = {
           id: selectedSmsProviderId,
@@ -151,13 +166,16 @@ export const SmsProvider = ({ children }) => {
           return;
         }
         const index = smsProvider.findIndex(
-          (item) => item.id == selectedSmsProvider.id
+          (item) => item.id == selectedSmsProviderId
         );
         smsProvider[index] = {
           ...selectedSmsProvider,
+          id: selectedSmsProviderId,
+          partnerID: process.env.REACT_APP_PARTNER_ID,
           status: !selectedSmsProvider.status,
         };
-        setSmsProvider((prev) => [...prev, ...smsProvider]);
+        setSmsProvider(smsProvider);
+        setSelectedSmsProviderId(null);
         toast.success("Status changed successfully");
       })
       .catch((err) => toast.error("Error: " + err));
@@ -172,6 +190,8 @@ export const SmsProvider = ({ children }) => {
     addSms,
     updateSms,
     token,
+    currentPage,
+    setCurrentPage,
   };
 
   return <SmsContext.Provider value={values}>{children}</SmsContext.Provider>;
