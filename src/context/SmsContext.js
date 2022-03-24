@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import queryString from "query-string";
+import { toast } from "react-toastify";
 
 const SmsContext = createContext();
 
@@ -12,6 +13,7 @@ export const SmsProvider = ({ children }) => {
   const [selectedSmsProvider, setSelectedSmsProvider] = useState({});
 
   useEffect(() => {
+    //content type has to be application/x-www-form-urlencoded, otherwise it does not work
     const tokenRequestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -29,13 +31,13 @@ export const SmsProvider = ({ children }) => {
         sessionStorage.setItem("token", JSON.stringify(data));
         setToken(JSON.stringify(data));
       })
-      .catch(console.error);
+      .catch((err) => toast.error("Error: " + err));
   }, []);
 
   useEffect(() => {
     if (token || sessionStorage.getItem("token")) {
       let _token = token || JSON.parse(sessionStorage.getItem("token"));
-      if(typeof _token === 'string'){
+      if (typeof _token === "string") {
         _token = JSON.parse(_token);
       }
       const getSmsRequestOptions = {
@@ -51,7 +53,7 @@ export const SmsProvider = ({ children }) => {
         .then((res) => {
           setSmsProvider(res.data.partnerProviders);
         })
-        .catch(console.error);
+        .catch((err) => toast.error("Error: " + err));
     }
   }, [token]);
 
@@ -79,10 +81,14 @@ export const SmsProvider = ({ children }) => {
       addSmsRequestOptions
     )
       .then((response) => response.json())
-      .then((data) => {
-        alert(JSON.stringify(data) + "eklendi");
+      .then((res) => {
+        if (res.message !== "Completed successfully") {
+          toast.error(res.message);
+          return;
+        }
+        toast.success("Added successfully");
       })
-      .catch(console.error);
+      .catch((err) => toast.error("Error: " + err));
   };
 
   const updateSms = (smsObj) => {
@@ -105,10 +111,25 @@ export const SmsProvider = ({ children }) => {
       updateSmsRequestOptions
     )
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data + "guncellendi");
+      .then((res) => {
+        if (res.message !== "Completed successfully") {
+          toast.error(res.message);
+          return;
+        }
+
+        const index = smsProvider.findIndex(
+          (item) => item.id == selectedSmsProvider.id
+        );
+        smsProvider[index] = {
+          id: selectedSmsProviderId,
+          partnerID: process.env.REACT_APP_PARTNER_ID,
+          status: selectedSmsProvider.status,
+          ...smsObj,
+        };
+        setSmsProvider((prev) => prev, smsProvider[index]);
+        toast.success("Updated successfully");
       })
-      .catch(console.error);
+      .catch((err) => toast.error("Error: " + err));
   };
 
   const changeStatus = () => {
@@ -120,14 +141,15 @@ export const SmsProvider = ({ children }) => {
     };
 
     fetch(
-      `http://c4f2.acsight.com:7770/api/system/change-stat-partner-sms-provider/?id=${
-        selectedSmsProviderId
-      }&stat=${!selectedSmsProvider.status}`,
+      `http://c4f2.acsight.com:7770/api/system/change-stat-partner-sms-provider/?id=${selectedSmsProviderId}&stat=${!selectedSmsProvider.status}`,
       changeStatusRequestOptions
     )
       .then((response) => response.json())
       .then((res) => {
-        console.log(res.success + " eklendi");
+        if (res.message !== "Completed successfully") {
+          toast.error(res.message);
+          return;
+        }
         const index = smsProvider.findIndex(
           (item) => item.id == selectedSmsProvider.id
         );
@@ -136,10 +158,10 @@ export const SmsProvider = ({ children }) => {
           status: !selectedSmsProvider.status,
         };
         setSmsProvider((prev) => [...prev, ...smsProvider]);
+        toast.success("Status changed successfully");
       })
-      .catch(console.error);
+      .catch((err) => toast.error("Error: " + err));
   };
-
 
   const values = {
     smsProvider,
@@ -149,7 +171,7 @@ export const SmsProvider = ({ children }) => {
     setSelectedSmsProviderId,
     addSms,
     updateSms,
-    token
+    token,
   };
 
   return <SmsContext.Provider value={values}>{children}</SmsContext.Provider>;

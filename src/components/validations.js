@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 const messages = {
-  required: "Bu alan zorundur.",
+  required: "This field is required.",
 };
 
 const schema = yup.object().shape({
