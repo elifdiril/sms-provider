@@ -5,6 +5,7 @@ import SmsProviderButton from "./components/SmsProviderButton";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AddOrUpdateSms from "./components/AddOrUpdateSms";
+import ChangeStatusButton from "./components/ChangeStatusButton";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                   />
 
                   <div className="smsButton">
+                    <ChangeStatusButton/>
                     <SmsProviderButton />
                     <SmsProviderButton isUpdate={true} />
                   </div>

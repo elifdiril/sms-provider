@@ -113,11 +113,13 @@ export const SmsProvider = ({ children }) => {
 
   const values = {
     smsProvider,
+    setSmsProvider,
     selectedSmsProviderId,
     selectedSmsProvider,
     setSelectedSmsProviderId,
     addSms,
     updateSms,
+    token
   };
 
   return <SmsContext.Provider value={values}>{children}</SmsContext.Provider>;

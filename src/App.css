@@ -8,6 +8,15 @@
   padding: 1%;
 }
 
+.smsButton button{
+  margin-right: 5px;
+  border-color:rgb(139, 186, 224);
+}
+
+.smsButton :nth-child(1){
+  background-color: #ffc85b;
+}
+
 .list {
   padding: 2% 7%;
 }
