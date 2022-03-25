@@ -99,8 +99,16 @@ export const SmsProvider = ({ children }) => {
           toast.error(res.message);
           return;
         }
-        setSmsProvider((prev) => prev, { ...smsObj, id: maxId + 1 });
-        setSelectedSmsProviderId(null);
+        //backend does not return added data, we have to set id manually
+        setSmsProvider((prev) => [
+          ...prev,
+          {
+            ...smsObj,
+            id: maxId + 1,
+            partnerID: process.env.REACT_APP_PARTNER_ID,
+            status: true,
+          },
+        ]);
         toast.success("Added successfully");
       })
       .catch((err) => toast.error("Error: " + err));
@@ -165,17 +173,19 @@ export const SmsProvider = ({ children }) => {
           toast.error(res.message);
           return;
         }
-        const index = smsProvider.findIndex(
-          (item) => item.id == selectedSmsProviderId
-        );
-        smsProvider[index] = {
-          ...selectedSmsProvider,
-          id: selectedSmsProviderId,
-          partnerID: process.env.REACT_APP_PARTNER_ID,
-          status: !selectedSmsProvider.status,
-        };
-        setSmsProvider(smsProvider);
-        setSelectedSmsProviderId(null);
+        setSmsProvider((prev) => {
+          return prev.map((item) => {
+            return item.id == selectedSmsProviderId
+              ? {
+                  ...item,
+                  id: selectedSmsProviderId,
+                  partnerID: process.env.REACT_APP_PARTNER_ID,
+                  status: !selectedSmsProvider.status,
+                }
+              : item;
+          });
+        });
+
         toast.success("Status changed successfully");
       })
       .catch((err) => toast.error("Error: " + err));

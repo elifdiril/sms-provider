@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import validationSchema from "./validations";
+import validationSchema from "../helper/validations";
 import Error from "./Error";
 import { useSms } from "../context/SmsContext";
 import "../styles/Form.css";
