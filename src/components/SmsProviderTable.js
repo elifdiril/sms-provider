@@ -23,6 +23,7 @@ function SmsProviderTable() {
     },
   };
 
+  //after update provider or status, stay current page
   const options = {
     page: currentPage,
     onPageChange: (page) => {

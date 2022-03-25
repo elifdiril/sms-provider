@@ -51,7 +51,9 @@ function Form({ selectedSmsProvider }) {
           >
             <option defaultValue>Select Provider</option>
             {enumValueArray.map((item, id) => (
-              <option value={id+1} key={id}>{item}</option>
+              <option value={id + 1} key={id}>
+                {item}
+              </option>
             ))}
           </select>
           {errors.providerID && touched.providerID && (
@@ -65,9 +67,6 @@ function Form({ selectedSmsProvider }) {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.baseURL && touched.baseURL && (
-            <Error message={errors.baseURL} />
-          )}
 
           <input
             placeholder="From Name"
@@ -76,9 +75,6 @@ function Form({ selectedSmsProvider }) {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.fromName && touched.fromName && (
-            <Error message={errors.fromName} />
-          )}
 
           <input
             placeholder="Username"
@@ -87,9 +83,6 @@ function Form({ selectedSmsProvider }) {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.username && touched.username && (
-            <Error message={errors.username} />
-          )}
 
           <input
             placeholder="Password"
@@ -99,9 +92,6 @@ function Form({ selectedSmsProvider }) {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.password && touched.password && (
-            <Error message={errors.password} />
-          )}
 
           <input
             placeholder="Vendor Code"
@@ -110,9 +100,6 @@ function Form({ selectedSmsProvider }) {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.vendorCode && touched.vendorCode && (
-            <Error message={errors.vendorCode} />
-          )}
 
           <input
             placeholder="Api Key"
@@ -121,8 +108,6 @@ function Form({ selectedSmsProvider }) {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.apiKey && touched.apiKey && <Error message={errors.apiKey} />}
-
           <input
             placeholder="Secret Key"
             value={values.secretKey}
@@ -130,9 +115,6 @@ function Form({ selectedSmsProvider }) {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.secretKey && touched.secretKey && (
-            <Error message={errors.secretKey} />
-          )}
 
           <input
             placeholder="Account SID"
@@ -141,9 +123,6 @@ function Form({ selectedSmsProvider }) {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.accountSID && touched.accountSID && (
-            <Error message={errors.accountSID} />
-          )}
           <input
             placeholder="Auth Token"
             value={values.authToken}
@@ -151,9 +130,6 @@ function Form({ selectedSmsProvider }) {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.authToken && touched.authToken && (
-            <Error message={errors.authToken} />
-          )}
         </div>
         <div className="formButtons">
           <button type="button" onClick={onCancelHandle}>

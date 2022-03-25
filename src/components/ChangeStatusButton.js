@@ -1,4 +1,3 @@
-import React from "react";
 import { useSms } from "../context/SmsContext";
 
 function ChangeStatusButton() {

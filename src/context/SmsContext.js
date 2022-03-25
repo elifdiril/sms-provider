@@ -71,7 +71,7 @@ export const SmsProvider = ({ children }) => {
 
   useEffect(() => {
     setSelectedSmsProvider(
-      smsProvider.find((item) => item.id == selectedSmsProviderId)
+      smsProvider.find((item) => item.id === selectedSmsProviderId)
     );
   }, [selectedSmsProviderId]);
 
@@ -139,9 +139,8 @@ export const SmsProvider = ({ children }) => {
           toast.error(res.message);
           return;
         }
-
         const index = smsProvider.findIndex(
-          (item) => item.id == selectedSmsProviderId
+          (item) => item.id === selectedSmsProviderId
         );
         smsProvider[index] = {
           id: selectedSmsProviderId,
@@ -175,7 +174,7 @@ export const SmsProvider = ({ children }) => {
         }
         setSmsProvider((prev) => {
           return prev.map((item) => {
-            return item.id == selectedSmsProviderId
+            return item.id === selectedSmsProviderId
               ? {
                   ...item,
                   id: selectedSmsProviderId,
@@ -185,7 +184,6 @@ export const SmsProvider = ({ children }) => {
               : item;
           });
         });
-
         toast.success("Status changed successfully");
       })
       .catch((err) => toast.error("Error: " + err));
@@ -199,7 +197,6 @@ export const SmsProvider = ({ children }) => {
     setSelectedSmsProviderId,
     addSms,
     updateSms,
-    token,
     currentPage,
     setCurrentPage,
   };
