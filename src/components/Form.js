@@ -4,41 +4,37 @@ import Error from "./Error";
 import { useSms } from "../context/SmsContext";
 import "../styles/Form.css";
 import { useNavigate } from "react-router-dom";
+import { ProviderEnum } from "../enums/ProviderEnum";
 
 function Form({ selectedSmsProvider }) {
   const { addSms, updateSms } = useSms();
   const navigate = useNavigate();
+  const enumValueArray = Object.values(ProviderEnum);
 
-  const {
-    values,
-    handleSubmit,
-    handleChange,
-    handleBlur,
-    errors,
-    touched,
-  } = useFormik({
-    initialValues: {
-      providerID: selectedSmsProvider?.providerID || undefined,
-      baseURL: selectedSmsProvider?.baseURL || "",
-      fromName: selectedSmsProvider?.fromName || "",
-      username: selectedSmsProvider?.username || "",
-      password: selectedSmsProvider?.password || "",
-      vendorCode: selectedSmsProvider?.vendorCode || "",
-      apiKey: selectedSmsProvider?.apiKey || "",
-      secretKey: selectedSmsProvider?.secretKey || "",
-      accountSID: selectedSmsProvider?.accountSID || "",
-      authToken: selectedSmsProvider?.authToken || "",
-    },
-    onSubmit: (values) => {
-      if (!!selectedSmsProvider) {
-        updateSms(values);
-      } else {
-        addSms(values);
-      }
-      setTimeout(() => navigate("/"), 600);
-    },
-    validationSchema,
-  });
+  const { values, handleSubmit, handleChange, handleBlur, errors, touched } =
+    useFormik({
+      initialValues: {
+        providerID: selectedSmsProvider?.providerID || undefined,
+        baseURL: selectedSmsProvider?.baseURL || "",
+        fromName: selectedSmsProvider?.fromName || "",
+        username: selectedSmsProvider?.username || "",
+        password: selectedSmsProvider?.password || "",
+        vendorCode: selectedSmsProvider?.vendorCode || "",
+        apiKey: selectedSmsProvider?.apiKey || "",
+        secretKey: selectedSmsProvider?.secretKey || "",
+        accountSID: selectedSmsProvider?.accountSID || "",
+        authToken: selectedSmsProvider?.authToken || "",
+      },
+      onSubmit: (values) => {
+        if (!!selectedSmsProvider) {
+          updateSms(values);
+        } else {
+          addSms(values);
+        }
+        setTimeout(() => navigate("/"), 600);
+      },
+      validationSchema,
+    });
 
   const onCancelHandle = () => {
     navigate("/");
@@ -54,13 +50,9 @@ function Form({ selectedSmsProvider }) {
             value={values.providerID}
           >
             <option defaultValue>Select Provider</option>
-            <option value={1}>PostaGuvercini</option>
-            <option value={2}>MobilDev</option>
-            <option value={3}>JetSMS</option>
-            <option value={4}>MailJet</option>
-            <option value={5}>Twilio</option>
-            <option value={6}>InfoBip</option>
-            <option value={7}>Vonage</option>
+            {enumValueArray.map((item, id) => (
+              <option value={id+1} key={id}>{item}</option>
+            ))}
           </select>
           {errors.providerID && touched.providerID && (
             <Error message={errors.providerID} />
