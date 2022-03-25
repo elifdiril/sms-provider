@@ -44,7 +44,7 @@ export const SmsProvider = ({ children }) => {
       }
       const getSmsRequestOptions = {
         method: "GET",
-        headers: { Authorization: `Bearer ${_token.access_token}` },
+        headers: { Authorization: `Bearer ${_token.access_token}`, "Access-Control-Allow-Headers": "Content-Type"},
       };
 
       fetch(
