@@ -5,6 +5,16 @@ import { toast } from "react-toastify";
 const SmsContext = createContext();
 
 export const SmsProvider = ({ children }) => {
+  const getTokenUrl = "http://c4f2.acsight.com:7710/connect/token";
+  const getSmsProviderListUrl =
+    "http://c4f2.acsight.com:7770/api/system/sms-provider-list";
+  const addSmsProviderUrl =
+    "http://c4f2.acsight.com:7770/api/system/add-partner-sms-provider";
+  const updateSmsProviderUrl =
+    "http://c4f2.acsight.com:7770/api/system/update-partner-sms-provider";
+  const changeStatusUrl =
+    "http://c4f2.acsight.com:7770/api/system/change-stat-partner-sms-provider/";
+
   const [smsProvider, setSmsProvider] = useState([]);
   const [token, setToken] = useState(
     JSON.parse(sessionStorage.getItem("token"))
@@ -27,7 +37,7 @@ export const SmsProvider = ({ children }) => {
         password: process.env.REACT_APP_PASSWORD,
       }),
     };
-    fetch("http://c4f2.acsight.com:7710/connect/token", tokenRequestOptions)
+    fetch(getTokenUrl, tokenRequestOptions)
       .then((response) => response.json())
       .then((data) => {
         sessionStorage.setItem("token", JSON.stringify(data));
@@ -44,13 +54,13 @@ export const SmsProvider = ({ children }) => {
       }
       const getSmsRequestOptions = {
         method: "GET",
-        headers: { Authorization: `Bearer ${_token.access_token}`, "Access-Control-Allow-Headers": "Content-Type"},
+        headers: {
+          Authorization: `Bearer ${_token.access_token}`,
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
       };
 
-      fetch(
-        "http://c4f2.acsight.com:7770/api/system/sms-provider-list",
-        getSmsRequestOptions
-      )
+      fetch(getSmsProviderListUrl, getSmsRequestOptions)
         .then((response) => response.json())
         .then((res) => {
           setSmsProvider(res.data.partnerProviders);
@@ -67,13 +77,13 @@ export const SmsProvider = ({ children }) => {
       }
     });
     setMaxId(max);
-  }, []);
+  }, [smsProvider]);
 
   useEffect(() => {
     setSelectedSmsProvider(
       smsProvider.find((item) => item.id === selectedSmsProviderId)
     );
-  }, [selectedSmsProviderId]);
+  }, [selectedSmsProviderId, smsProvider]);
 
   const addSms = (smsObj) => {
     const addSmsRequestOptions = {
@@ -89,10 +99,7 @@ export const SmsProvider = ({ children }) => {
       }),
     };
 
-    fetch(
-      "http://c4f2.acsight.com:7770/api/system/add-partner-sms-provider",
-      addSmsRequestOptions
-    )
+    fetch(addSmsProviderUrl, addSmsRequestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.message !== "Completed successfully") {
@@ -129,10 +136,7 @@ export const SmsProvider = ({ children }) => {
       }),
     };
 
-    fetch(
-      "http://c4f2.acsight.com:7770/api/system/update-partner-sms-provider",
-      updateSmsRequestOptions
-    )
+    fetch(updateSmsProviderUrl, updateSmsRequestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.message !== "Completed successfully") {
@@ -163,7 +167,7 @@ export const SmsProvider = ({ children }) => {
     };
 
     fetch(
-      `http://c4f2.acsight.com:7770/api/system/change-stat-partner-sms-provider/?id=${selectedSmsProviderId}&stat=${!selectedSmsProvider.status}`,
+      `${changeStatusUrl}?id=${selectedSmsProviderId}&stat=${!selectedSmsProvider.status}`,
       changeStatusRequestOptions
     )
       .then((response) => response.json())
