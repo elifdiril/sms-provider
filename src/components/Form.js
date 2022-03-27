@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ProviderEnum } from "../enums/ProviderEnum";
 
 function Form({ selectedSmsProvider }) {
-  const { addSms, updateSms } = useSms();
+  const { addSms, updateSms, setSelectedSmsProviderId } = useSms();
   const navigate = useNavigate();
   const enumValueArray = Object.values(ProviderEnum);
 
@@ -37,6 +37,7 @@ function Form({ selectedSmsProvider }) {
     });
 
   const onCancelHandle = () => {
+    setSelectedSmsProviderId(null);
     navigate("/");
   };
 

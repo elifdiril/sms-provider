@@ -14,7 +14,6 @@ export const SmsProvider = ({ children }) => {
     "http://c4f2.acsight.com:7770/api/system/update-partner-sms-provider";
   const changeStatusUrl =
     "http://c4f2.acsight.com:7770/api/system/change-stat-partner-sms-provider/";
-
   const [smsProvider, setSmsProvider] = useState([]);
   const [token, setToken] = useState(
     JSON.parse(sessionStorage.getItem("token"))
@@ -151,7 +150,7 @@ export const SmsProvider = ({ children }) => {
                   id: selectedSmsProviderId,
                   partnerID: process.env.REACT_APP_PARTNER_ID,
                   status: selectedSmsProvider.status,
-                  ...smsObj
+                  ...smsObj,
                 }
               : item;
           });
