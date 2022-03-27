@@ -143,16 +143,19 @@ export const SmsProvider = ({ children }) => {
           toast.error(res.message);
           return;
         }
-        const index = smsProvider.findIndex(
-          (item) => item.id === selectedSmsProviderId
-        );
-        smsProvider[index] = {
-          id: selectedSmsProviderId,
-          partnerID: process.env.REACT_APP_PARTNER_ID,
-          status: selectedSmsProvider.status,
-          ...smsObj,
-        };
-        setSmsProvider((prev) => prev, smsProvider[index]);
+        setSmsProvider((prev) => {
+          return prev.map((item) => {
+            return item.id === selectedSmsProviderId
+              ? {
+                  ...item,
+                  id: selectedSmsProviderId,
+                  partnerID: process.env.REACT_APP_PARTNER_ID,
+                  status: selectedSmsProvider.status,
+                  ...smsObj
+                }
+              : item;
+          });
+        });
         toast.success("Updated successfully");
       })
       .catch((err) => toast.error("Error: " + err));
