@@ -6,7 +6,7 @@ import "../styles/Form.css";
 import { useNavigate } from "react-router-dom";
 import { ProviderEnum } from "../enums/ProviderEnum";
 
-function Form({ selectedSmsProvider }) {
+export default function Form({ selectedSmsProvider }) {
   const { addSms, updateSms, setSelectedSmsProviderId } = useSms();
   const navigate = useNavigate();
   const enumValueArray = Object.values(ProviderEnum);
@@ -31,7 +31,8 @@ function Form({ selectedSmsProvider }) {
         } else {
           addSms(values);
         }
-        setTimeout(() => navigate("/"), 600);
+        setSelectedSmsProviderId(null);
+        setTimeout(() => navigate("/"), 500);
       },
       validationSchema,
     });
@@ -142,5 +143,3 @@ function Form({ selectedSmsProvider }) {
     </form>
   );
 }
-
-export default Form;
